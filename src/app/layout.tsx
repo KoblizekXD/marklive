@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import { Roboto } from 'next/font/google'
 import "./globals.css";
 import '@fontsource-variable/jetbrains-mono'
-
-const inter = Roboto({ subsets: ['latin'], weight: '400' });
 
 export const metadata: Metadata = {
   title: "MarkLive",

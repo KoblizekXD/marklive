@@ -109,18 +109,16 @@ export default function Home() {
             className={"p-2 text-slate-200 text-xl"}
             components={{
               code(props) {
-                const { children, className, node, ...rest } = props;
+                const { children, className, ...rest } = props;
                 const match = /language-(\w+)/.exec(className || "");
                 oneDark['code[class*="language-"]']["fontFamily"] =
                   "JetBrains Mono Variable";
                 return match ? (
                   <SyntaxHighlighter
-                    {...rest}
                     PreTag="div"
-                    children={String(children || "").replace(/\n$/, "")}
                     language={match[1]}
                     style={oneDark}
-                  />
+                  >{String(children || "").replace(/\n$/, "")}</SyntaxHighlighter>
                 ) : (
                   <code {...rest} className={`${className} font-mono`}>
                     {children}
