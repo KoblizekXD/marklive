@@ -6,24 +6,36 @@ import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { autoSave } from "@/lib/utils";
+import { autoSave, autoSaveLocalDocument, createDocument, getLocalDocuments, overrideDocument } from "@/lib/utils";
 import { Dialog } from "@/components/dialog";
 
 export default function Home() {
   const [text, setText] = useState("");
-  const [currentlyEditing, setCurrentlyEditing] = useState<number | undefined>(
-    undefined
-  );
+  const [currentlyEditing, setCurrentlyEditing] = useState<number | undefined>(undefined);
+  const [currentlyEditingTitle, setCurrentlyEditingTitle] = useState<string | undefined>(undefined);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
 
   useEffect(() => {
     setText(localStorage.getItem("current-document") || "");
+    setCurrentlyEditing(Number(localStorage.getItem('current-document-i')) || undefined);
   }, []);
+
+  useEffect(() => {
+    if (currentlyEditing)
+      setCurrentlyEditingTitle(getLocalDocuments()[currentlyEditing].title)
+  }, [currentlyEditing]);
 
   return (
     <main className="flex h-screen flex-col">
       {showSaveDialog && (
-        <Dialog className="gap-y-2 lg:w-1/5">
+        <Dialog onSubmit={e => {
+          e.preventDefault();
+          const fd = new FormData(e.currentTarget);
+          const i = autoSaveLocalDocument(createDocument(fd.get('name') as string, fd.get('description') as string, text), currentlyEditing);
+          setCurrentlyEditing(i);
+          localStorage.setItem('current-document-i', i.toString());
+          setShowSaveDialog(false);
+        }} className="gap-y-2 lg:w-1/5">
           <h1 className="font-semibold text-xl">Save document</h1>
           <label className="flex flex-col">
             Name
@@ -52,7 +64,13 @@ export default function Home() {
         <div className="ml-auto h-full">
           <button
             onClick={() => {
-              setShowSaveDialog(true);
+              if (!currentlyEditing) {
+                setShowSaveDialog(true);
+                return;
+              }
+
+              overrideDocument(text, currentlyEditing);
+              console.log('Saved');
             }}
             className="px-4 hover:brightness-75 h-full"
           >
