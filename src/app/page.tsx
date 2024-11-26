@@ -56,7 +56,7 @@ export default function Home() {
         </Dialog>
       )}
       <nav className="flex items-center">
-        <NavItem className="font-bold" href="/">
+        <NavItem className="font-bold border-b" href="/">
           Marklive
         </NavItem>
         <NavItem href="/saved">Saved</NavItem>
@@ -103,7 +103,7 @@ export default function Home() {
           }}
           className="w-full font-mono caret-slate-200 text-slate-200 resize-none p-2 text-xl outline-none basis-1/2 bg-[#1E1E2E]"
         />
-        <div className="bg-[#181825] basis-1/2">
+        <div className="bg-[#181825] border-l-[#11111B] border-l basis-1/2">
           <Markdown
             remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
             className={"p-2 text-slate-200 text-xl"}

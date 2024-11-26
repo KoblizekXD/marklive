@@ -45,3 +45,11 @@ export function getAutoLocalDocument(): string {
 export function getLocalDocuments(): IMarkdownDocument[] {
   return JSON.parse(localStorage.getItem('saved') || '[]');
 }
+
+export function paginate<T>(arr: T[], pages: number): T[][] {
+  const out = [];
+  for (let i = 0; i < arr.length; i += pages) {
+    out.push(arr.slice(i, i + pages));
+  }
+  return out;
+}
