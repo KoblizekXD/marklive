@@ -61,7 +61,18 @@ export default function Home() {
         </NavItem>
         <NavItem href="/saved">Saved</NavItem>
         <NavItem href="/browse">Browse</NavItem>
+        {currentlyEditingTitle && <h1 className="font-semibold text-gray-500 text-xl">{currentlyEditingTitle}</h1>}
         <div className="ml-auto h-full">
+          {currentlyEditing && 
+            <button onClick={() => {
+              setCurrentlyEditing(undefined);
+              localStorage.setItem('current-document-i', '');
+              localStorage.setItem('current-document', '');
+              setText('');
+            }} className='text-gray-600'>
+              New
+            </button>
+          }
           <button
             onClick={() => {
               if (!currentlyEditing) {

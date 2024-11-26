@@ -7,7 +7,7 @@ export interface IMarkdownDocument {
 
 export function createDocument(title?: string, description?: string, content?: string): IMarkdownDocument {
   return {
-    title: title || title?.substring(0, 20) || 'Untitled',
+    title: title || content?.substring(0, 20) || 'Untitled',
     description: description || '',
     content: content || ''
   }
