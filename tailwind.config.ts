@@ -12,6 +12,9 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        mono: ['JetBrains Mono Variable', 'monoscape'],
+      }
     },
   },
   plugins: [],
