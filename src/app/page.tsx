@@ -55,14 +55,45 @@ export default function Home() {
           </div>
         </Dialog>
       )}
+      <nav className="flex sm:hidden pl-2 bg-black fixed bottom-0 left-0 right-0 h-12">
+        {currentlyEditing && 
+          <button onClick={() => {
+            setCurrentlyEditing(undefined);
+            localStorage.setItem('current-document-i', '');
+            localStorage.setItem('current-document', '');
+            setText('');
+          }} className='text-gray-600'>
+            New
+          </button>
+        }
+        <div className="ml-auto flex h-full">
+            <button
+              onClick={() => {
+                if (!currentlyEditing) {
+                  setShowSaveDialog(true);
+                  return;
+                }
+
+                overrideDocument(text, currentlyEditing);
+                console.log('Saved');
+              }}
+              className="px-4 hover:brightness-75 h-full"
+            >
+              Save
+            </button>
+            <button className="px-4 hover:brightness-75 bg-blue-600 h-full">
+              Publish
+            </button>
+          </div>
+      </nav>
       <nav className="flex items-center">
         <NavItem className="font-bold border-b" href="/">
           Marklive
         </NavItem>
         <NavItem href="/saved">Saved</NavItem>
         <NavItem href="/browse">Browse</NavItem>
-        {currentlyEditingTitle && <h1 className="font-semibold text-gray-500 text-xl">{currentlyEditingTitle}</h1>}
-        <div className="ml-auto h-full">
+        {currentlyEditingTitle && <h1 className="font-semibold ml-auto sm:ml-0 pr-2 text-gray-500 text-xl">{currentlyEditingTitle}</h1>}
+        <div className="ml-auto sm:flex hidden h-full">
           {currentlyEditing && 
             <button onClick={() => {
               setCurrentlyEditing(undefined);
@@ -92,7 +123,7 @@ export default function Home() {
           </button>
         </div>
       </nav>
-      <div className="flex-1 flex">
+      <div className="flex-1 flex flex-col sm:flex-row">
         <textarea
           spellCheck={false}
           defaultValue={text}
@@ -103,7 +134,7 @@ export default function Home() {
           }}
           className="w-full font-mono caret-slate-200 text-slate-200 resize-none p-2 text-xl outline-none basis-1/2 bg-[#1E1E2E]"
         />
-        <div className="bg-[#181825] border-l-[#11111B] border-l basis-1/2">
+        <div className="bg-[#181825] sm:border-l-[#11111B] sm:border-l basis-1/2">
           <Markdown
             remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
             className={"p-2 text-slate-200 text-xl"}
