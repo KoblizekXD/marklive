@@ -17,8 +17,11 @@ export default function Home() {
 
   useEffect(() => {
     setText(localStorage.getItem("current-document") || "");
-    const res = Number(localStorage.getItem('current-document-i'));
-    setCurrentlyEditing(!isNaN(res) ? res : undefined);
+    const item = localStorage.getItem('current-document-i');
+    if (item !== null) {
+      const res = parseInt(item);
+      setCurrentlyEditing(!isNaN(res) ? res : undefined);
+    }
   }, []);
 
   useEffect(() => {
@@ -102,6 +105,7 @@ export default function Home() {
               localStorage.setItem('current-document-i', '');
               localStorage.setItem('current-document', '');
               setText('');
+              setCurrentlyEditingTitle(undefined);
             }} className='text-gray-600'>
               New
             </button>
