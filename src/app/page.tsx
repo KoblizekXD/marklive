@@ -17,11 +17,12 @@ export default function Home() {
 
   useEffect(() => {
     setText(localStorage.getItem("current-document") || "");
-    setCurrentlyEditing(Number(localStorage.getItem('current-document-i')) || undefined);
+    const res = Number(localStorage.getItem('current-document-i'));
+    setCurrentlyEditing(!isNaN(res) ? res : undefined);
   }, []);
 
   useEffect(() => {
-    if (currentlyEditing)
+    if (currentlyEditing !== undefined)
       setCurrentlyEditingTitle(getLocalDocuments()[currentlyEditing].title)
   }, [currentlyEditing]);
 
@@ -62,6 +63,7 @@ export default function Home() {
             localStorage.setItem('current-document-i', '');
             localStorage.setItem('current-document', '');
             setText('');
+            setCurrentlyEditingTitle(undefined);
           }} className='text-gray-600'>
             New
           </button>
@@ -69,7 +71,7 @@ export default function Home() {
         <div className="ml-auto flex h-full">
             <button
               onClick={() => {
-                if (!currentlyEditing) {
+                if (currentlyEditing === undefined) {
                   setShowSaveDialog(true);
                   return;
                 }
@@ -94,7 +96,7 @@ export default function Home() {
         <NavItem href="/browse">Browse</NavItem>
         {currentlyEditingTitle && <h1 className="font-semibold ml-auto sm:ml-0 pr-2 text-gray-500 text-xl">{currentlyEditingTitle}</h1>}
         <div className="ml-auto sm:flex hidden h-full">
-          {currentlyEditing && 
+          {currentlyEditing !== undefined && 
             <button onClick={() => {
               setCurrentlyEditing(undefined);
               localStorage.setItem('current-document-i', '');
@@ -106,7 +108,7 @@ export default function Home() {
           }
           <button
             onClick={() => {
-              if (!currentlyEditing) {
+              if (currentlyEditing === undefined) {
                 setShowSaveDialog(true);
                 return;
               }
