@@ -5,6 +5,10 @@ import { getLocalDocuments, IMarkdownDocument, paginate } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+function filterDocuments(documents: IMarkdownDocument[], filter: string) {
+  return documents.filter(doc => doc.title.toLowerCase().includes(filter.toLowerCase()) || doc.description.toLowerCase().includes(filter.toLowerCase()));
+}
+
 export default function SavePage() {
   const [pages, setPages] = useState<IMarkdownDocument[][]>([]);
   const router = useRouter();
@@ -24,7 +28,9 @@ export default function SavePage() {
       </nav>
       <div className="flex-1 m-12 flex flex-col gap-y-4">
         <h1 className='text-3xl font-extrabold'>Locally saved documents</h1>
-        <input type='text' placeholder="Filter..." className="bg-[#11111B] rounded p-2" />
+        <input onChange={e => {
+          setPages(paginate(filterDocuments(getLocalDocuments(), e.target.value), 12));
+        }} type='text' placeholder="Filter..." className="bg-[#11111B] outline-none rounded p-2" />
         <div className="flex-1 flex flex-col">
           {pages.map((page, i) => (
             <div key={i} className="flex gap-x-4 basis-1/3">
